@@ -4,6 +4,8 @@ let previousValue = null;
 let calculated = false;
 
 
+// a / 0. = "infinity"   -unfixed
+
 function appendValue(value) {
 
     if (calculated){
@@ -64,6 +66,15 @@ function calculateResult() {
 
 function setOperator(operator) {
 
+    if (operator === '%') {
+        if (currentValue !== "" && previousValue !== null) {
+            currentValue = calculate(previousValue, parseFloat(currentValue), '%');
+            displayValue();
+            return; 
+        }
+        return; 
+    }
+
     if (currentOperator && currentValue !== "" && calculated == false) {
         previousValue = calculate(previousValue, parseFloat(currentValue), currentOperator);
         currentValue = "";
@@ -89,11 +100,14 @@ function calculate(a,b, operator){
             return a + b;
         case '-':
             return a - b;
-        case '%':
-            return a % b;
+        case '%': 
+            return a * (b / 100);
         case '÷':
             return a / b;
         case 'x':
             return a * b;
     }
 }
+
+
+
